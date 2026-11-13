@@ -44,5 +44,5 @@ dotnet test .\OmniHub.sln -c Release --no-build
 ## Legal & Contact
 
 - **Publisher**: `Delgado Creative Enterprises LLC d/b/a DelgadoLogic` (District of Columbia LLC)
-- **Address**: `6218 Georgia Avenue NW, Ste 1-698, Washington, DC 20011, USA`
+- **Legal Documentation**: See [`LICENSE`](LICENSE) and [delgadologic.tech/legal](https://delgadologic.tech/legal/eula)
 - **Support**: `support@delgadologic.tech` (Monday–Friday, 9:00 AM – 5:00 PM EST)

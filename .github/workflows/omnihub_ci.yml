@@ -1,0 +1,52 @@
+name: OmniHub CI
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*.*.*']
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-test:
+    name: Build & Test (Release)
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout OmniHub
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          path: omnihub
+
+      - name: Checkout LogicFlow shared libraries
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: DelgadoLogic/logicflow-core
+          path: logicflow-core
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@0f4a354dd5547a28c70b7853dbd95d5b67886e73 # v6.1.0
+        with:
+          dotnet-version: '8.x'
+
+      - name: Restore OmniHub
+        run: dotnet restore omnihub/OmniHub.sln -p:LogicFlowRoot="${{ github.workspace }}\logicflow-core"
+
+      - name: Build OmniHub (Release)
+        run: dotnet build omnihub/OmniHub.sln -c Release --no-restore -p:LogicFlowRoot="${{ github.workspace }}\logicflow-core"
+
+      - name: Run OmniHub xUnit Tests
+        run: dotnet test omnihub/OmniHub.sln -c Release --no-build --verbosity normal -p:LogicFlowRoot="${{ github.workspace }}\logicflow-core"
+
+      - name: Publish OmniHub App
+        shell: pwsh
+        run: |
+          dotnet publish omnihub/src/OmniHub.App/OmniHub.App.csproj `
+            -c Release `
+            -r win-x64 `
+            --self-contained false `
+            -p:LogicFlowRoot="${{ github.workspace }}\logicflow-core" `
+            -o ./publish/omnihub
