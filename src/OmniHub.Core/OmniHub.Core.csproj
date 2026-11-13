@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <RootNamespace>OmniHub.Core</RootNamespace>
+    <AssemblyName>OmniHub.Core</AssemblyName>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <LangVersion>12.0</LangVersion>
+    <Company>Delgado Creative Enterprises LLC d/b/a DelgadoLogic</Company>
+    <Product>DelgadoLogic OmniHub</Product>
+    <Version>1.0.0</Version>
+    <FileVersion>1.0.0.0</FileVersion>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <Description>OmniHub Core Runtime — cross-app discovery, Ed25519 updates, unified licensing, .lfc cloud vault snapshots, Named Pipe IPC handoff, and NTFS hard-linked GGUF model vault.</Description>
+    <Copyright>Copyright (c) 2026 Delgado Creative Enterprises LLC d/b/a DelgadoLogic. All rights reserved.</Copyright>
+    <NoWarn>$(NoWarn);CA1416</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\LogicFlow\src\DelgadoLogic.Core\DelgadoLogic.Core.csproj" />
+    <ProjectReference Include="..\..\..\LogicFlow\src\OmniCore.Engine\OmniCore.Engine.csproj" />
+    <ProjectReference Include="..\..\..\LogicFlow\src\OmniLicense\OmniLicense.csproj" />
+    <ProjectReference Include="..\..\..\LogicFlow\src\OmniPulse\OmniPulse.csproj" />
+    <ProjectReference Include="..\..\..\LogicFlow\src\LogicFlow.Storage.Engine\LogicFlow.Storage.Engine.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="OmniHub.Tests" />
+  </ItemGroup>
+
+</Project>

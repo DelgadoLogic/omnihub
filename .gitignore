@@ -1,0 +1,26 @@
+## Build & IDE Artifacts
+**/bin/
+**/obj/
+.vs/
+*.user
+*.suo
+*.cache
+TestResults/
+publish/
+dist/
+
+## Keys & Secrets
+*.pfx
+*.p12
+*.key
+*.pem
+license.lic
+license_token.json
+
+## Logs & Temp
+*.log
+*.tmp
+*.part
+Thumbs.db
+desktop.ini
+.DS_Store

@@ -1,0 +1,720 @@
+<Window x:Class="OmniHub.App.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="DelgadoLogic OmniHub"
+        Width="1280"
+        Height="820"
+        MinWidth="1040"
+        MinHeight="680"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None"
+        Background="{DynamicResource BgWindowBrush}"
+        FontFamily="{StaticResource OmniFont}"
+        PreviewKeyDown="OnWindowPreviewKeyDown"
+        Closing="OnWindowClosing">
+
+    <WindowChrome.WindowChrome>
+        <WindowChrome CaptionHeight="46" ResizeBorderThickness="6" GlassFrameThickness="-1"/>
+    </WindowChrome.WindowChrome>
+
+    <Grid Background="{DynamicResource BgWindowBrush}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="256"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- ══════════════════════════════════════════════════════════════════ -->
+        <!--  LEFT SIDEBAR NAVIGATION                                           -->
+        <!-- ══════════════════════════════════════════════════════════════════ -->
+        <Border Grid.Column="0"
+                Background="{DynamicResource BgSidebarBrush}"
+                BorderBrush="{DynamicResource BorderSubtleBrush}"
+                BorderThickness="0,0,1,0">
+            <DockPanel LastChildFill="True">
+
+                <!-- Brand Header -->
+                <StackPanel DockPanel.Dock="Top" Margin="20,18,20,14">
+                    <StackPanel Orientation="Horizontal">
+                        <Border Width="38" Height="38" CornerRadius="11" Background="{DynamicResource BrandGradientBrush}" Margin="0,0,12,0">
+                            <TextBlock Text="⚡" FontSize="18" Foreground="#FFFFFF" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Text="OmniHub" FontSize="19" FontWeight="Bold" Foreground="{DynamicResource TextPrimaryBrush}"/>
+                            <TextBlock Text="DelgadoLogic Suite" FontSize="11.5" Foreground="{DynamicResource AccentCyanBrush}"/>
+                        </StackPanel>
+                    </StackPanel>
+                    <Border Height="2" Margin="0,16,0,0" CornerRadius="1" Background="{DynamicResource BrandGradientBrush}"/>
+                </StackPanel>
+
+                <!-- Bottom Unified Edition & Pipe Status Card -->
+                <Border DockPanel.Dock="Bottom"
+                        Margin="14,8,14,14"
+                        Padding="14,12"
+                        CornerRadius="12"
+                        Background="{DynamicResource BgCardBrush}"
+                        BorderBrush="{DynamicResource BorderSubtleBrush}"
+                        BorderThickness="1">
+                    <StackPanel>
+                        <DockPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Ellipse Width="8" Height="8" Fill="{DynamicResource AccentCyanBrush}" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                <TextBlock x:Name="SidebarEditionBadge" Text="Free Edition" FontSize="12.5" FontWeight="Bold" Foreground="{DynamicResource TextPrimaryBrush}"/>
+                            </StackPanel>
+                            <TextBlock x:Name="SidebarSeatsBadge" DockPanel.Dock="Right" Text="1 Seat" FontSize="11" Foreground="{DynamicResource TextSecondaryBrush}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                        </DockPanel>
+
+                        <TextBlock x:Name="SidebarPipeBadge"
+                                   Text="IPC Pipe: \\.\pipe\delgadologic-omnihub"
+                                   FontFamily="{StaticResource MonoFont}"
+                                   FontSize="10"
+                                   Foreground="{DynamicResource SuccessGreenBrush}"
+                                   Margin="0,8,0,8"
+                                   TextTrimming="CharacterEllipsis"/>
+
+                        <Button Content="Manage License"
+                                Style="{StaticResource SecondaryActionBtn}"
+                                Height="30"
+                                FontSize="11.5"
+                                Click="OnNavLicenseClick"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Navigation Buttons -->
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                    <StackPanel Margin="12,4,12,8">
+                        <TextBlock Text="ECOSYSTEM" FontSize="10.5" FontWeight="Bold" Foreground="{DynamicResource TextMutedBrush}" Margin="10,2,0,6"/>
+
+                        <Button x:Name="BtnNavApps" Style="{StaticResource SidebarNavBtnActive}" Click="OnNavAppsClick" ToolTip="Discover, install, update, repair, and launch LogicFlow &amp; Aeon Browser (Ctrl+1)">
+                            <TextBlock Text="Apps &amp; Updates"/>
+                        </Button>
+
+                        <Button x:Name="BtnNavCloud" Style="{StaticResource SidebarNavBtn}" Click="OnNavCloudClick" ToolTip="DelgadoLogic Cloud .lfc snapshots &amp; Aeon ↔ LogicFlow IPC handoff (Ctrl+2)">
+                            <TextBlock Text="Cloud &amp; Cross-App Handoff"/>
+                        </Button>
+
+                        <Button x:Name="BtnNavModels" Style="{StaticResource SidebarNavBtn}" Click="OnNavModelsClick" ToolTip="Shared GGUF local AI vault &amp; NTFS hard-link deduplication (Ctrl+3)">
+                            <TextBlock Text="AI Model Vault"/>
+                        </Button>
+
+                        <TextBlock Text="ACCOUNT &amp; SYSTEM" FontSize="10.5" FontWeight="Bold" Foreground="{DynamicResource TextMutedBrush}" Margin="10,16,0,6"/>
+
+                        <Button x:Name="BtnNavLicense" Style="{StaticResource SidebarNavBtn}" Click="OnNavLicenseClick" ToolTip="Unified Ed25519 / RSA-2048 license &amp; Machine HWID (Ctrl+4)">
+                            <TextBlock Text="Unified License"/>
+                        </Button>
+
+                        <Button x:Name="BtnNavSettings" Style="{StaticResource SidebarNavBtn}" Click="OnNavSettingsClick" ToolTip="Startup tray, Alt+Space hotkey &amp; OmniPulse privacy settings (Ctrl+5)">
+                            <TextBlock Text="Settings &amp; Privacy"/>
+                        </Button>
+                    </StackPanel>
+                </ScrollViewer>
+            </DockPanel>
+        </Border>
+
+        <!-- ══════════════════════════════════════════════════════════════════ -->
+        <!--  MAIN WORKSPACE AREA                                               -->
+        <!-- ══════════════════════════════════════════════════════════════════ -->
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="48"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="30"/>
+            </Grid.RowDefinitions>
+
+            <!-- Top Title & Raycast Command Bar -->
+            <Border Grid.Row="0"
+                    Background="{DynamicResource BgHeaderBrush}"
+                    BorderBrush="{DynamicResource BorderSubtleBrush}"
+                    BorderThickness="0,0,0,1"
+                    Padding="20,0,0,0">
+                <DockPanel LastChildFill="True">
+
+                    <!-- Right Window Controls -->
+                    <StackPanel DockPanel.Dock="Right"
+                                Orientation="Horizontal"
+                                VerticalAlignment="Center"
+                                WindowChrome.IsHitTestVisibleInChrome="True">
+                        <Button x:Name="BtnHeaderRefresh"
+                                Content="↻ Refresh"
+                                Style="{StaticResource SecondaryActionBtn}"
+                                Height="28"
+                                Padding="10,0"
+                                FontSize="11.5"
+                                Margin="0,0,8,0"
+                                Click="OnRefreshAllClick"
+                                ToolTip="Refresh discovery, snapshots, models &amp; license state (F5)"/>
+
+                        <Button x:Name="BtnHeaderTheme"
+                                Content="◐ Theme"
+                                Style="{StaticResource SecondaryActionBtn}"
+                                Height="28"
+                                Padding="10,0"
+                                FontSize="11.5"
+                                Margin="0,0,10,0"
+                                Click="OnToggleThemeClick"
+                                ToolTip="Switch between Obsidian Dark and Daylight Light mode"/>
+
+                        <Button Style="{StaticResource ChromeCaptionBtn}" Click="OnMinimizeClick" ToolTip="Minimize">
+                            <Path Width="10" Height="1" Data="M 0,0.5 L 10,0.5" Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" StrokeThickness="1.2"/>
+                        </Button>
+
+                        <Button Style="{StaticResource ChromeCaptionBtn}" Click="OnMaximizeRestoreClick" ToolTip="Maximize / Restore">
+                            <Rectangle Width="9" Height="9" Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" StrokeThickness="1.2"/>
+                        </Button>
+
+                        <Button Style="{StaticResource ChromeCloseBtn}" Click="OnCloseClick" ToolTip="Close">
+                            <Path Width="10" Height="10" Data="M 0,0 L 10,10 M 10,0 L 0,10" Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" StrokeThickness="1.2"/>
+                        </Button>
+                    </StackPanel>
+
+                    <!-- Center Raycast Quick Launcher Trigger Pill -->
+                    <Grid VerticalAlignment="Center">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock x:Name="HeaderViewTitle"
+                                   Grid.Column="0"
+                                   Text="Apps &amp; Updates"
+                                   FontSize="14.5"
+                                   FontWeight="Bold"
+                                   Foreground="{DynamicResource TextPrimaryBrush}"
+                                   VerticalAlignment="Center"
+                                   Margin="0,0,20,0"/>
+
+                        <Button Grid.Column="1"
+                                MaxWidth="430"
+                                HorizontalAlignment="Left"
+                                Height="30"
+                                Padding="12,0"
+                                Style="{StaticResource SecondaryActionBtn}"
+                                WindowChrome.IsHitTestVisibleInChrome="True"
+                                Click="OnOpenQuickLauncherClick"
+                                ToolTip="Open Raycast-style Quick Launcher (Alt+Space or Ctrl+K)">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="⚡ Quick Command Bar — apps, .lfc snapshots, Aeon tabs..."
+                                           FontSize="11.5"
+                                           Foreground="{DynamicResource TextSecondaryBrush}"
+                                           Margin="0,0,14,0"/>
+                                <TextBlock Text="Alt+Space"
+                                           FontFamily="{StaticResource MonoFont}"
+                                           FontSize="10.5"
+                                           FontWeight="Bold"
+                                           Foreground="{DynamicResource AccentCyanBrush}"/>
+                            </StackPanel>
+                        </Button>
+                    </Grid>
+                </DockPanel>
+            </Border>
+
+            <!-- ══════════════════════════════════════════════════════════════ -->
+            <!--  VIEW 0: APPS & UPDATES                                        -->
+            <!-- ══════════════════════════════════════════════════════════════ -->
+            <ScrollViewer x:Name="ViewApps" Grid.Row="1" VerticalScrollBarVisibility="Auto" Padding="24,20">
+                <StackPanel>
+                    <!-- Hero Banner -->
+                    <Border Background="{DynamicResource HeroBannerBrush}"
+                            BorderBrush="{DynamicResource BorderAccentBrush}"
+                            BorderThickness="1"
+                            CornerRadius="16"
+                            Padding="24,20"
+                            Margin="0,0,0,20">
+                        <DockPanel>
+                            <Button DockPanel.Dock="Right"
+                                    Content="Check All Updates"
+                                    Style="{StaticResource PrimaryActionBtn}"
+                                    VerticalAlignment="Center"
+                                    Click="OnCheckAllUpdatesClick"/>
+                            <StackPanel>
+                                <TextBlock Text="DelgadoLogic Desktop Suite" FontSize="21" FontWeight="Bold" Foreground="{DynamicResource TextPrimaryBrush}"/>
+                                <TextBlock Text="Canonical sorted-JSON Ed25519 manifest verification + fail-closed SHA-256 staging via api.delgadologic.tech"
+                                           FontSize="12.5"
+                                           Foreground="{DynamicResource TextSecondaryBrush}"
+                                           Margin="0,5,0,0"/>
+                            </StackPanel>
+                        </DockPanel>
+                    </Border>
+
+                    <!-- Product Cards Grid -->
+                    <UniformGrid Columns="2" Margin="0,0,0,18">
+
+                        <!-- CARD 1: LOGICFLOW v1.0 -->
+                        <Border Style="{StaticResource GlassCard}" Margin="0,0,10,0">
+                            <StackPanel>
+                                <DockPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Border Width="44" Height="44" CornerRadius="12" Background="#1E00E5FF" BorderBrush="{DynamicResource AccentCyanBrush}" BorderThickness="1" Margin="0,0,12,0">
+                                            <TextBlock Text="LF" FontWeight="Bold" FontSize="16" Foreground="{DynamicResource AccentCyanBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                        <StackPanel VerticalAlignment="Center">
+                                            <TextBlock Text="LogicFlow" FontSize="18" FontWeight="Bold" Foreground="{DynamicResource TextPrimaryBrush}"/>
+                                            <TextBlock x:Name="TxtLfVersionSub" Text="v1.0.0 • System Optimization, HyperStore &amp; Sentinel" FontSize="11.5" Foreground="{DynamicResource TextSecondaryBrush}"/>
+                                        </StackPanel>
+                                    </StackPanel>
+
+                                    <Border DockPanel.Dock="Right" HorizontalAlignment="Right" VerticalAlignment="Top"
+                                            Background="#1810B981" BorderBrush="{DynamicResource SuccessGreenBrush}" BorderThickness="1" CornerRadius="8" Padding="9,4">
+                                        <TextBlock x:Name="TxtLfStatusBadge" Text="Checking..." FontSize="11" FontWeight="Bold" Foreground="{DynamicResource SuccessGreenBrush}"/>
+                                    </Border>
+                                </DockPanel>
+
+                                <Border Background="{DynamicResource BgInputBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" CornerRadius="10" Padding="12,10" Margin="0,16,0,14">
+                                    <StackPanel>
+                                        <TextBlock x:Name="TxtLfPath" Text="Path: Resolving..." FontFamily="{StaticResource MonoFont}" FontSize="11" Foreground="{DynamicResource TextSecondaryBrush}" TextTrimming="CharacterEllipsis"/>
+                                        <TextBlock x:Name="TxtLfSha256" Text="SHA-256: —" FontFamily="{StaticResource MonoFont}" FontSize="11" Foreground="{DynamicResource TextMutedBrush}" Margin="0,4,0,0" TextTrimming="CharacterEllipsis"/>
+                                        <TextBlock Text="✓ Sovereign Ed25519 Public Key Pinned" FontSize="11" FontWeight="SemiBold" Foreground="{DynamicResource AccentCyanBrush}" Margin="0,6,0,0"/>
+                                    </StackPanel>
+                                </Border>
+
+                                <DockPanel Margin="0,0,0,14">
+                                    <TextBlock Text="Update Channel:" VerticalAlignment="Center" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,0,10,0"/>
+                                    <ComboBox x:Name="CmbLfChannel" Width="120" SelectedIndex="0" SelectionChanged="OnLfChannelChanged">
+                                        <ComboBoxItem Content="Stable" Tag="stable"/>
+                                        <ComboBoxItem Content="Beta" Tag="beta"/>
+                                    </ComboBox>
+                                    <TextBlock x:Name="TxtLfUpdateStatus" Text="Ready" FontSize="11.5" Foreground="{DynamicResource TextSecondaryBrush}" VerticalAlignment="Center" Margin="14,0,0,0" TextTrimming="CharacterEllipsis"/>
+                                </DockPanel>
+
+                                <WrapPanel>
+                                    <Button x:Name="BtnLfLaunch" Content="Launch" Style="{StaticResource PrimaryActionBtn}" Margin="0,0,8,8" Click="OnLfLaunchClick"/>
+                                    <Button x:Name="BtnLfLaunchCli" Content="Launch CLI (lf.exe)" Style="{StaticResource SecondaryActionBtn}" Margin="0,0,8,8" Click="OnLfLaunchCliClick"/>
+                                    <Button Content="Check Update" Style="{StaticResource SecondaryActionBtn}" Margin="0,0,8,8" Click="OnLfCheckUpdateClick"/>
+                                    <Button Content="Install / Update" Style="{StaticResource SecondaryActionBtn}" Margin="0,0,8,8" Click="OnLfInstallUpdateClick"/>
+                                    <Button Content="Repair" Style="{StaticResource SecondaryActionBtn}" Margin="0,0,0,8" Click="OnLfRepairClick"/>
+                                </WrapPanel>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- CARD 2: AEON BROWSER v0.22.0 -->
+                        <Border Style="{StaticResource GlassCard}" Margin="10,0,0,0">
+                            <StackPanel>
+                                <DockPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Border Width="44" Height="44" CornerRadius="12" Background="#249333EA" BorderBrush="{DynamicResource AccentPurpleBrush}" BorderThickness="1" Margin="0,0,12,0">
+                                            <TextBlock Text="Æ" FontWeight="Bold" FontSize="18" Foreground="{DynamicResource AccentPurpleBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                        <StackPanel VerticalAlignment="Center">
+                                            <TextBlock Text="Aeon Browser" FontSize="18" FontWeight="Bold" Foreground="{DynamicResource TextPrimaryBrush}"/>
+                                            <TextBlock x:Name="TxtAeonVersionSub" Text="v0.22.0 • Anti-Fingerprinting &amp; Agentic Browser" FontSize="11.5" Foreground="{DynamicResource TextSecondaryBrush}"/>
+                                        </StackPanel>
+                                    </StackPanel>
+
+                                    <Border DockPanel.Dock="Right" HorizontalAlignment="Right" VerticalAlignment="Top"
+                                            Background="#1810B981" BorderBrush="{DynamicResource SuccessGreenBrush}" BorderThickness="1" CornerRadius="8" Padding="9,4">
+                                        <TextBlock x:Name="TxtAeonStatusBadge" Text="Checking..." FontSize="11" FontWeight="Bold" Foreground="{DynamicResource SuccessGreenBrush}"/>
+                                    </Border>
+                                </DockPanel>
+
+                                <Border Background="{DynamicResource BgInputBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" CornerRadius="10" Padding="12,10" Margin="0,16,0,14">
+                                    <StackPanel>
+                                        <TextBlock x:Name="TxtAeonPath" Text="Path: Resolving..." FontFamily="{StaticResource MonoFont}" FontSize="11" Foreground="{DynamicResource TextSecondaryBrush}" TextTrimming="CharacterEllipsis"/>
+                                        <TextBlock x:Name="TxtAeonSha256" Text="SHA-256: —" FontFamily="{StaticResource MonoFont}" FontSize="11" Foreground="{DynamicResource TextMutedBrush}" Margin="0,4,0,0" TextTrimming="CharacterEllipsis"/>
+                                        <TextBlock Text="✓ Sovereign Ed25519 Public Key Pinned" FontSize="11" FontWeight="SemiBold" Foreground="{DynamicResource AccentCyanBrush}" Margin="0,6,0,0"/>
+                                    </StackPanel>
+                                </Border>
+
+                                <DockPanel Margin="0,0,0,14">
+                                    <TextBlock Text="Update Channel:" VerticalAlignment="Center" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,0,10,0"/>
+                                    <ComboBox x:Name="CmbAeonChannel" Width="120" SelectedIndex="0" SelectionChanged="OnAeonChannelChanged">
+                                        <ComboBoxItem Content="Stable" Tag="stable"/>
+                                        <ComboBoxItem Content="Beta" Tag="beta"/>
+                                    </ComboBox>
+                                    <TextBlock x:Name="TxtAeonUpdateStatus" Text="Ready" FontSize="11.5" Foreground="{DynamicResource TextSecondaryBrush}" VerticalAlignment="Center" Margin="14,0,0,0" TextTrimming="CharacterEllipsis"/>
+                                </DockPanel>
+
+                                <WrapPanel>
+                                    <Button x:Name="BtnAeonLaunch" Content="Launch" Style="{StaticResource PrimaryActionBtn}" Margin="0,0,8,8" Click="OnAeonLaunchClick"/>
+                                    <Button Content="Check Update" Style="{StaticResource SecondaryActionBtn}" Margin="0,0,8,8" Click="OnAeonCheckUpdateClick"/>
+                                    <Button Content="Install / Update" Style="{StaticResource SecondaryActionBtn}" Margin="0,0,8,8" Click="OnAeonInstallUpdateClick"/>
+                                    <Button Content="Repair" Style="{StaticResource SecondaryActionBtn}" Margin="0,0,0,8" Click="OnAeonRepairClick"/>
+                                </WrapPanel>
+                            </StackPanel>
+                        </Border>
+                    </UniformGrid>
+
+                    <!-- Activity Output Card -->
+                    <Border Style="{StaticResource GlassCard}" Padding="18,14">
+                        <StackPanel>
+                            <TextBlock Text="App Lifecycle &amp; Update Verification Log" FontSize="13.5" FontWeight="Bold" Foreground="{DynamicResource TextPrimaryBrush}"/>
+                            <TextBlock x:Name="TxtAppsActivityLog"
+                                       Text="OmniHub initialized. Ready to manage LogicFlow and Aeon Browser."
+                                       FontFamily="{StaticResource MonoFont}"
+                                       FontSize="11.5"
+                                       Foreground="{DynamicResource TextSecondaryBrush}"
+                                       TextWrapping="Wrap"
+                                       Margin="0,8,0,0"/>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+
+            <!-- ══════════════════════════════════════════════════════════════ -->
+            <!--  VIEW 1: CLOUD & CROSS-APP HANDOFF                             -->
+            <!-- ══════════════════════════════════════════════════════════════ -->
+            <ScrollViewer x:Name="ViewCloud" Grid.Row="1" Visibility="Collapsed" VerticalScrollBarVisibility="Auto" Padding="24,20">
+                <StackPanel>
+                    <!-- Vault Header Card -->
+                    <Border Style="{StaticResource GlassCard}" Margin="0,0,0,18">
+                        <DockPanel>
+                            <WrapPanel DockPanel.Dock="Right" VerticalAlignment="Center">
+                                <Button Content="Create .lfc Snapshot" Style="{StaticResource PrimaryActionBtn}" Margin="0,0,8,0" Click="OnCreateCloudSnapshotClick"/>
+                                <Button Content="Pack Folder to .lfc" Style="{StaticResource SecondaryActionBtn}" Margin="0,0,8,0" Click="OnPackFolderToVaultClick"/>
+                                <Button Content="Open Cloud Folder" Style="{StaticResource SecondaryActionBtn}" Click="OnOpenCloudFolderClick"/>
+                            </WrapPanel>
+                            <StackPanel>
+                                <TextBlock Text="DelgadoLogic Cloud &amp; Cross-App Handoff Bus" FontSize="18" FontWeight="Bold" Foreground="{DynamicResource TextPrimaryBrush}"/>
+                                <TextBlock x:Name="TxtCloudVaultPath" Text="%USERPROFILE%\DelgadoLogic Cloud" FontFamily="{StaticResource MonoFont}" FontSize="11.5" Foreground="{DynamicResource AccentCyanBrush}" Margin="0,4,0,0"/>
+                                <TextBlock x:Name="TxtCloudWatcherSummary" Text="FileSystemWatcher Active • Content-addressed FastCDC + BLAKE3 + Zstd .lfc snapshots" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,4,0,0"/>
+                            </StackPanel>
+                        </DockPanel>
+                    </Border>
+
+                    <!-- Aeon <-> LogicFlow Handoff Action Strip -->
+                    <Border Style="{StaticResource GlassCard}" Margin="0,0,0,18">
+                        <StackPanel>
+                            <TextBlock Text="Aeon Browser ↔ LogicFlow Cross-App Handoff Actions" FontSize="14.5" FontWeight="Bold" Foreground="{DynamicResource TextPrimaryBrush}"/>
+                            <TextBlock Text="Exchange DPAPI-encrypted Playwright auth.json sessions via \\.\pipe\aeon-agent and route files directly to HyperStore or Sentinel."
+                                       FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,4,0,12"/>
+
+                            <WrapPanel Margin="0,0,0,10">
+                                <Button Content="Pull Aeon auth.json Session (DPAPI)" Style="{StaticResource PrimaryActionBtn}" Margin="0,0,8,8" Click="OnPullAeonSessionClick"/>
+                                <Button Content="Push Session to Aeon" Style="{StaticResource SecondaryActionBtn}" Margin="0,0,8,8" Click="OnPushAeonSessionClick"/>
+                                <Button Content="Send File to HyperStore .lfc" Style="{StaticResource SecondaryActionBtn}" Margin="0,0,8,8" Click="OnSendFileToHyperStoreClick"/>
+                                <Button Content="Scan File with Sentinel" Style="{StaticResource SecondaryActionBtn}" Margin="0,0,8,8" Click="OnScanFileWithSentinelClick"/>
+                                <Button Content="Query Live Aeon Tabs" Style="{StaticResource SecondaryActionBtn}" Margin="0,0,0,8" Click="OnQueryAeonTabsClick"/>
+                            </WrapPanel>
+
+                            <DockPanel>
+                                <Button DockPanel.Dock="Right" Content="Open in Aeon" Style="{StaticResource SecondaryActionBtn}" Margin="8,0,0,0" Click="OnOpenUrlInAeonClick"/>
+                                <TextBox x:Name="TxtAeonUrlInput" Style="{StaticResource ModernTextBox}" Text="https://delgadologic.tech"/>
+                            </DockPanel>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Two-Column Live Feed & Snapshot History -->
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="1.15*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Left: Live Vault Files + Pipe Events -->
+                        <Border Grid.Column="0" Style="{StaticResource GlassCard}" Margin="0,0,9,0">
+                            <StackPanel>
+                                <TextBlock x:Name="TxtVaultFilesHeader" Text="Live DelgadoLogic Cloud Files (0)" FontSize="14" FontWeight="Bold" Foreground="{DynamicResource TextPrimaryBrush}" Margin="0,0,0,10"/>
+                                <ListBox x:Name="LstVaultFiles" Height="210" Background="Transparent" BorderThickness="0">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <DockPanel Margin="0,3">
+                                                <TextBlock DockPanel.Dock="Right" Text="{Binding SizeDisplay}" FontFamily="{StaticResource MonoFont}" FontSize="11" Foreground="{DynamicResource TextMutedBrush}" Margin="10,0,0,0"/>
+                                                <StackPanel>
+                                                    <TextBlock Text="{Binding RelativePath}" FontSize="12.5" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimaryBrush}" TextTrimming="CharacterEllipsis"/>
+                                                    <TextBlock Text="{Binding CategoryAndTime}" FontSize="11" Foreground="{DynamicResource TextSecondaryBrush}"/>
+                                                </StackPanel>
+                                            </DockPanel>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+
+                                <Border Height="1" Background="{DynamicResource BorderSubtleBrush}" Margin="0,12"/>
+
+                                <TextBlock Text="Named Pipe Handoff Activity (\\.\pipe\delgadologic-omnihub)" FontSize="13" FontWeight="Bold" Foreground="{DynamicResource TextPrimaryBrush}" Margin="0,0,0,8"/>
+                                <ListBox x:Name="LstHandoffEvents" Height="130" Background="Transparent" BorderThickness="0">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Margin="0,3">
+                                                <TextBlock Text="{Binding HeaderLine}" FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource AccentCyanBrush}"/>
+                                                <TextBlock Text="{Binding Summary}" FontSize="11.5" Foreground="{DynamicResource TextSecondaryBrush}" TextTrimming="CharacterEllipsis"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Right: .lfc Snapshot History with 1-Click Restore -->
+                        <Border Grid.Column="1" Style="{StaticResource GlassCard}" Margin="9,0,0,0">
+                            <StackPanel>
+                                <DockPanel Margin="0,0,0,10">
+                                    <Button DockPanel.Dock="Right"
+                                            Content="Restore Selected Snapshot"
+                                            Style="{StaticResource PrimaryActionBtn}"
+                                            Height="32"
+                                            Click="OnRestoreSelectedSnapshotClick"/>
+                                    <TextBlock x:Name="TxtSnapshotsHeader" Text="Zstd .lfc Snapshot History (0)" VerticalAlignment="Center" FontSize="14" FontWeight="Bold" Foreground="{DynamicResource TextPrimaryBrush}"/>
+                                </DockPanel>
+
+                                <ListBox x:Name="LstSnapshots" Height="365" Background="Transparent" BorderThickness="0">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border Background="{DynamicResource BgInputBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" CornerRadius="8" Padding="10,8" Margin="0,3">
+                                                <StackPanel>
+                                                    <DockPanel>
+                                                        <TextBlock DockPanel.Dock="Right" Text="{Binding EstTime}" FontSize="11" Foreground="{DynamicResource TextMutedBrush}"/>
+                                                        <TextBlock Text="{Binding SnapshotId}" FontFamily="{StaticResource MonoFont}" FontSize="12" FontWeight="Bold" Foreground="{DynamicResource AccentCyanBrush}"/>
+                                                    </DockPanel>
+                                                    <TextBlock Text="{Binding MetricsLine}" FontSize="11.5" Foreground="{DynamicResource TextPrimaryBrush}" Margin="0,3,0,0"/>
+                                                    <TextBlock Text="{Binding ReasonAndHash}" FontSize="11" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,2,0,0" TextTrimming="CharacterEllipsis"/>
+                                                </StackPanel>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                </StackPanel>
+            </ScrollViewer>
+
+            <!-- ══════════════════════════════════════════════════════════════ -->
+            <!--  VIEW 2: AI MODEL VAULT                                        -->
+            <!-- ══════════════════════════════════════════════════════════════ -->
+            <ScrollViewer x:Name="ViewModels" Grid.Row="1" Visibility="Collapsed" VerticalScrollBarVisibility="Auto" Padding="24,20">
+                <StackPanel>
+                    <!-- Storage Savings & Actions Header -->
+                    <Border Style="{StaticResource GlassCard}" Margin="0,0,0,18">
+                        <DockPanel>
+                            <WrapPanel DockPanel.Dock="Right" VerticalAlignment="Center">
+                                <Button Content="Scan &amp; Hard-Link Deduplicate" Style="{StaticResource PrimaryActionBtn}" Margin="0,0,8,0" Click="OnDeduplicateModelsClick"/>
+                                <Button Content="Verify SHA-256 Digests" Style="{StaticResource SecondaryActionBtn}" Margin="0,0,8,0" Click="OnVerifyModelsShaClick"/>
+                                <Button Content="Open Vault Folder" Style="{StaticResource SecondaryActionBtn}" Click="OnOpenModelVaultFolderClick"/>
+                            </WrapPanel>
+                            <StackPanel>
+                                <TextBlock Text="Shared Local GGUF AI Model Vault" FontSize="18" FontWeight="Bold" Foreground="{DynamicResource TextPrimaryBrush}"/>
+                                <TextBlock x:Name="TxtModelVaultRoot" Text="%ProgramData%\DelgadoLogic\Models" FontFamily="{StaticResource MonoFont}" FontSize="11.5" Foreground="{DynamicResource AccentCyanBrush}" Margin="0,4,0,0"/>
+                                <TextBlock x:Name="TxtModelSavingsMeter"
+                                           Text="NTFS Hard-Link Deduplication Ready — eliminates duplicate multi-GB Gemma 4 weights across LogicFlow &amp; Aeon"
+                                           FontSize="12"
+                                           FontWeight="SemiBold"
+                                           Foreground="{DynamicResource SuccessGreenBrush}"
+                                           Margin="0,5,0,0"/>
+                            </StackPanel>
+                        </DockPanel>
+                    </Border>
+
+                    <!-- Model Catalog List -->
+                    <ItemsControl x:Name="ItemsModelCatalog">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Style="{StaticResource GlassCard}" Margin="0,0,0,12" Padding="18,16">
+                                    <DockPanel>
+                                        <Border DockPanel.Dock="Right" VerticalAlignment="Center"
+                                                Background="{DynamicResource BgCardElevatedBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1"
+                                                CornerRadius="8" Padding="12,6" Margin="14,0,0,0">
+                                            <TextBlock Text="{Binding PresenceBadge}" FontSize="11.5" FontWeight="Bold" Foreground="{DynamicResource AccentCyanBrush}"/>
+                                        </Border>
+                                        <StackPanel>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="{Binding DisplayName}" FontSize="15" FontWeight="Bold" Foreground="{DynamicResource TextPrimaryBrush}"/>
+                                                <TextBlock Text="{Binding MetaBadge}" FontSize="11.5" Foreground="{DynamicResource AccentPurpleBrush}" FontWeight="SemiBold" VerticalAlignment="Center" Margin="12,0,0,0"/>
+                                            </StackPanel>
+                                            <TextBlock Text="{Binding FileNameAndSize}" FontFamily="{StaticResource MonoFont}" FontSize="11.5" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,4,0,0"/>
+                                            <TextBlock Text="{Binding ChecksumAndLinksLine}" FontFamily="{StaticResource MonoFont}" FontSize="11" Foreground="{DynamicResource TextMutedBrush}" Margin="0,4,0,0" TextTrimming="CharacterEllipsis"/>
+                                        </StackPanel>
+                                    </DockPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </ScrollViewer>
+
+            <!-- ══════════════════════════════════════════════════════════════ -->
+            <!--  VIEW 3: UNIFIED LICENSE                                       -->
+            <!-- ══════════════════════════════════════════════════════════════ -->
+            <ScrollViewer x:Name="ViewLicense" Grid.Row="1" Visibility="Collapsed" VerticalScrollBarVisibility="Auto" Padding="24,20">
+                <StackPanel>
+                    <!-- Active License Card -->
+                    <Border Background="{DynamicResource HeroBannerBrush}" BorderBrush="{DynamicResource BorderAccentBrush}" BorderThickness="1" CornerRadius="16" Padding="24,20" Margin="0,0,0,18">
+                        <DockPanel>
+                            <Border DockPanel.Dock="Right" VerticalAlignment="Center" Background="{DynamicResource BgCardBrush}" BorderBrush="{DynamicResource AccentCyanBrush}" BorderThickness="1" CornerRadius="12" Padding="18,12">
+                                <StackPanel HorizontalAlignment="Center">
+                                    <TextBlock x:Name="TxtLicenseEditionBig" Text="Free" FontSize="22" FontWeight="Bold" Foreground="{DynamicResource AccentCyanBrush}" HorizontalAlignment="Center"/>
+                                    <TextBlock x:Name="TxtLicenseSeatCount" Text="1 Device Seat" FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" HorizontalAlignment="Center" Margin="0,2,0,0"/>
+                                </StackPanel>
+                            </Border>
+
+                            <StackPanel>
+                                <TextBlock Text="Unified OmniLicense Entitlement" FontSize="19" FontWeight="Bold" Foreground="{DynamicResource TextPrimaryBrush}"/>
+                                <TextBlock x:Name="TxtLicenseStatusSummary" Text="Evaluating local cryptographic license..." FontSize="13" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,6,0,0"/>
+                                <TextBlock x:Name="TxtLicenseSourceAndExpiry" Text="Dual Ed25519 + RSA-2048 offline verification • Shared across LogicFlow &amp; Aeon Browser" FontFamily="{StaticResource MonoFont}" FontSize="11" Foreground="{DynamicResource TextMutedBrush}" Margin="0,8,0,0"/>
+                            </StackPanel>
+                        </DockPanel>
+                    </Border>
+
+                    <!-- Machine HWID Card -->
+                    <Border Style="{StaticResource GlassCard}" Margin="0,0,0,18">
+                        <StackPanel>
+                            <TextBlock Text="Hardware Fingerprint (Machine HWID)" FontSize="14.5" FontWeight="Bold" Foreground="{DynamicResource TextPrimaryBrush}"/>
+                            <TextBlock Text="44-character SHA-256 Base64 hardware binding (CPU + BaseBoard + BIOS + Disk). Used strictly for license activation/seat validation — never linked to or used as your pseudonymous telemetry installId."
+                                       FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" TextWrapping="Wrap" Margin="0,4,0,12"/>
+
+                            <DockPanel>
+                                <Button DockPanel.Dock="Right" Content="Copy HWID" Style="{StaticResource PrimaryActionBtn}" Margin="10,0,0,0" Click="OnCopyHwidClick"/>
+                                <TextBox x:Name="TxtMachineHwid" Style="{StaticResource ModernTextBox}" IsReadOnly="True" FontFamily="{StaticResource MonoFont}"/>
+                            </DockPanel>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Cloud Order + Offline Token Activation Grid -->
+                    <UniformGrid Columns="2" Margin="0,0,0,18">
+                        <Border Style="{StaticResource GlassCard}" Margin="0,0,9,0">
+                            <StackPanel>
+                                <TextBlock Text="Online Order Activation" FontSize="14.5" FontWeight="Bold" Foreground="{DynamicResource TextPrimaryBrush}"/>
+                                <TextBlock Text="Activate your LogicFlow Pro ($19.99 Launch / $29.99 Regular, 3 devices) or Team 10-Pack ($149.00, 10 devices) order ID."
+                                           FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" TextWrapping="Wrap" Margin="0,4,0,12"/>
+                                <TextBlock Text="Order ID" FontSize="11.5" FontWeight="SemiBold" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,0,0,4"/>
+                                <TextBox x:Name="TxtOrderIdInput" Style="{StaticResource ModernTextBox}" Margin="0,0,0,10"/>
+                                <TextBlock Text="Purchase Email (Optional)" FontSize="11.5" FontWeight="SemiBold" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,0,0,4"/>
+                                <TextBox x:Name="TxtOrderEmailInput" Style="{StaticResource ModernTextBox}" Margin="0,0,0,12"/>
+                                <Button Content="Activate Order Online" Style="{StaticResource PrimaryActionBtn}" HorizontalAlignment="Left" Click="OnActivateCloudOrderClick"/>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Style="{StaticResource GlassCard}" Margin="9,0,0,0">
+                            <StackPanel>
+                                <TextBlock Text="Offline .lic / JSON Token Import" FontSize="14.5" FontWeight="Bold" Foreground="{DynamicResource TextPrimaryBrush}"/>
+                                <TextBlock Text="Paste a signed JSON / Base64 license token or import a .lic file for 100% air-gapped Ed25519 / RSA-2048 verification."
+                                           FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" TextWrapping="Wrap" Margin="0,4,0,12"/>
+                                <TextBox x:Name="TxtOfflineTokenInput"
+                                         Style="{StaticResource ModernTextBox}"
+                                         Height="88"
+                                         AcceptsReturn="True"
+                                         TextWrapping="Wrap"
+                                         FontFamily="{StaticResource MonoFont}"
+                                         FontSize="11.5"
+                                         Margin="0,0,0,12"/>
+                                <WrapPanel>
+                                    <Button Content="Verify &amp; Activate Token" Style="{StaticResource PrimaryActionBtn}" Margin="0,0,8,0" Click="OnImportOfflineTokenClick"/>
+                                    <Button Content="Browse .lic File..." Style="{StaticResource SecondaryActionBtn}" Click="OnBrowseLicenseFileClick"/>
+                                </WrapPanel>
+                            </StackPanel>
+                        </Border>
+                    </UniformGrid>
+
+                    <!-- Guarantee Notice -->
+                    <Border Style="{StaticResource GlassCard}" Padding="18,14">
+                        <TextBlock Text="✓ Backed by DelgadoLogic's 60-day no-questions-asked money-back guarantee across LogicFlow Pro ($29.99 / $19.99 60-day launch promo, 3 devices), Extra Seat (+$9.99), and Team 10-Pack ($149.00, 10 devices). Includes all v1.x updates."
+                                   FontSize="12.5"
+                                   Foreground="{DynamicResource TextSecondaryBrush}"
+                                   TextWrapping="Wrap"/>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+
+            <!-- ══════════════════════════════════════════════════════════════ -->
+            <!--  VIEW 4: SETTINGS & PRIVACY                                    -->
+            <!-- ══════════════════════════════════════════════════════════════ -->
+            <ScrollViewer x:Name="ViewSettings" Grid.Row="1" Visibility="Collapsed" VerticalScrollBarVisibility="Auto" Padding="24,20">
+                <StackPanel>
+                    <!-- Desktop Shell & Hotkey Card -->
+                    <Border Style="{StaticResource GlassCard}" Margin="0,0,0,18">
+                        <StackPanel>
+                            <TextBlock Text="Desktop Integration &amp; Quick Launcher" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource TextPrimaryBrush}" Margin="0,0,0,12"/>
+
+                            <CheckBox x:Name="ChkLaunchAtStartup"
+                                      Content="Start OmniHub minimized in the Windows system tray when I sign in"
+                                      Foreground="{DynamicResource TextPrimaryBrush}"
+                                      Margin="0,0,0,10"
+                                      Click="OnStartupToggleClick"/>
+
+                            <CheckBox x:Name="ChkMinimizeToTray"
+                                      Content="Keep OmniHub running in the system tray when closing the main window"
+                                      Foreground="{DynamicResource TextPrimaryBrush}"
+                                      Margin="0,0,0,12"
+                                      Click="OnMinimizeToTrayToggleClick"/>
+
+                            <Border Background="{DynamicResource BgInputBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" CornerRadius="10" Padding="14,10">
+                                <DockPanel>
+                                    <Button DockPanel.Dock="Right" Content="Test Quick Launcher" Style="{StaticResource SecondaryActionBtn}" Height="30" Click="OnOpenQuickLauncherClick"/>
+                                    <StackPanel VerticalAlignment="Center">
+                                        <TextBlock Text="Global Raycast Command Hotkey (Alt+Space)" FontSize="12.5" FontWeight="Bold" Foreground="{DynamicResource AccentCyanBrush}"/>
+                                        <TextBlock x:Name="TxtHotkeyStatus" Text="Checking hotkey registration..." FontSize="11.5" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,2,0,0"/>
+                                    </StackPanel>
+                                </DockPanel>
+                            </Border>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- OmniPulse Consent & Privacy Controls -->
+                    <Border Style="{StaticResource GlassCard}" Margin="0,0,0,18">
+                        <StackPanel>
+                            <TextBlock Text="Diagnostics &amp; Privacy Controls (OmniPulse)" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource TextPrimaryBrush}"/>
+                            <TextBlock Text="Diagnostic telemetry is OFF by default (ConsentLevel.None). Free: telemetry disabled; Community: requires Standard pseudonymous diagnostic sharing; Pro &amp; Team 10-Pack: optional and OFF by default. Events carry a rotatable 128-bit random pseudonymous installId stored locally in consent.json — never derived from hardware serials or linked to your license HWID."
+                                       FontSize="12"
+                                       Foreground="{DynamicResource TextSecondaryBrush}"
+                                       TextWrapping="Wrap"
+                                       Margin="0,6,0,14"/>
+
+                            <WrapPanel Margin="0,0,0,14">
+                                <TextBlock Text="Privacy Region (Local OS Setting — No IP Lookup):" VerticalAlignment="Center" FontSize="12.5" Foreground="{DynamicResource TextPrimaryBrush}" Margin="0,0,10,0"/>
+                                <ComboBox x:Name="CmbPrivacyRegion" Width="230" SelectionChanged="OnPrivacyRegionChanged"/>
+                                <TextBlock x:Name="TxtEffectiveConsentBadge" Text="Effective Level: None (OFF)" VerticalAlignment="Center" FontSize="12.5" FontWeight="Bold" Foreground="{DynamicResource AccentCyanBrush}" Margin="16,0,0,0"/>
+                            </WrapPanel>
+
+                            <CheckBox x:Name="ChkStandardTelemetry"
+                                      Content="Opt in to Standard pseudonymous diagnostics (crash stack traces, error codes &amp; scan metrics)"
+                                      Foreground="{DynamicResource TextPrimaryBrush}"
+                                      Margin="0,0,0,8"
+                                      Click="OnTelemetryConsentChanged"/>
+
+                            <CheckBox x:Name="ChkExtendedTelemetry"
+                                      Content="Opt in to Extended pseudonymous hardware/driver baseline digest (OS build, GPU/driver inventory — zero device serial numbers)"
+                                      Foreground="{DynamicResource TextPrimaryBrush}"
+                                      Margin="0,0,0,14"
+                                      Click="OnTelemetryConsentChanged"/>
+
+                            <Border Background="{DynamicResource BgInputBrush}" BorderBrush="{DynamicResource BorderSubtleBrush}" BorderThickness="1" CornerRadius="10" Padding="14,10">
+                                <DockPanel>
+                                    <WrapPanel DockPanel.Dock="Right" VerticalAlignment="Center">
+                                        <Button Content="Rotate Install ID" Style="{StaticResource SecondaryActionBtn}" Height="30" Margin="0,0,8,0" Click="OnRotateInstallIdClick"/>
+                                        <Button Content="Delete My Data &amp; Reset" Style="{StaticResource SecondaryActionBtn}" Height="30" Click="OnDeleteTelemetryDataClick"/>
+                                    </WrapPanel>
+                                    <StackPanel VerticalAlignment="Center">
+                                        <TextBlock Text="Pseudonymous Install Identifier (installId)" FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimaryBrush}"/>
+                                        <TextBlock x:Name="TxtPseudonymousInstallId" Text="None (ConsentLevel.None)" FontFamily="{StaticResource MonoFont}" FontSize="11.5" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,2,0,0"/>
+                                    </StackPanel>
+                                </DockPanel>
+                            </Border>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Corporate, Age & Refund Compliance Footer (FACTS.md) -->
+                    <Border Style="{StaticResource GlassCard}" Padding="20,16">
+                        <StackPanel>
+                            <TextBlock Text="Publisher, Legal &amp; Compliance Notice" FontSize="14.5" FontWeight="Bold" Foreground="{DynamicResource TextPrimaryBrush}"/>
+                            <TextBlock Text="Delgado Creative Enterprises LLC d/b/a DelgadoLogic (District of Columbia Limited Liability Company)"
+                                       FontSize="12.5" FontWeight="SemiBold" Foreground="{DynamicResource AccentCyanBrush}" Margin="0,6,0,0"/>
+                            <TextBlock Text="Postal Address: 6218 Georgia Avenue NW, Ste 1-698, Washington, DC 20011, USA"
+                                       FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,3,0,0"/>
+                            <TextBlock Text="Support: support@delgadologic.tech • Privacy: privacy@delgadologic.tech • Security: security@delgadologic.tech • Billing: billing@delgadologic.tech (Monday–Friday, 9:00 AM – 5:00 PM EST)"
+                                       FontSize="12" Foreground="{DynamicResource TextSecondaryBrush}" TextWrapping="Wrap" Margin="0,3,0,0"/>
+                            <TextBlock Text="Minimum User Age: 16+ years of age required to purchase, download, install, or use DelgadoLogic software. Commercial Guarantee: 60-day no-questions-asked money-back guarantee."
+                                       FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" Margin="0,6,0,0"/>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+
+            <!-- Bottom Status Strip -->
+            <Border Grid.Row="2"
+                    Background="{DynamicResource BgHeaderBrush}"
+                    BorderBrush="{DynamicResource BorderSubtleBrush}"
+                    BorderThickness="0,1,0,0"
+                    Padding="20,0">
+                <DockPanel VerticalAlignment="Center">
+                    <TextBlock DockPanel.Dock="Right"
+                               Text="Delgado Creative Enterprises LLC d/b/a DelgadoLogic • v1.0.0"
+                               FontSize="11"
+                               Foreground="{DynamicResource TextMutedBrush}"
+                               HorizontalAlignment="Right"/>
+                    <TextBlock x:Name="TxtGlobalStatusBar"
+                               Text="Ready."
+                               FontSize="11.5"
+                               Foreground="{DynamicResource TextSecondaryBrush}"
+                               TextTrimming="CharacterEllipsis"/>
+                </DockPanel>
+            </Border>
+        </Grid>
+    </Grid>
+</Window>
